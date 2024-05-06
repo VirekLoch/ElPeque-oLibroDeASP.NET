@@ -1,0 +1,44 @@
+@model ToDoViewModel
+@using Humanizer
+
+@{
+    ViewData["Title"] = "Maneja tus tareas";
+}
+
+<div class="panel panel-default todo-panel">
+    <div class="panel-heading">
+        <h3 class="panel-title">@ViewData["Title"]</h3>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>&#x2714</td>
+                <td>Item</td>
+                <td>Due</td>
+            </tr>
+        </thead>
+
+
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <form asp-action="MarkDone" method="POST">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <input type="checkbox" class="done-chekbox" asp-for="@item.IsDone" />
+                    </form>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @item.DueAt.Humanize()
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div class="panel-footer add-item-form">
+        @await Html.PartialAsync("AddItemPartial", new ToDoItem())
+    </div>
+</div>
